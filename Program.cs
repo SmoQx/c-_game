@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 
 class Player
@@ -98,8 +99,12 @@ class Obstacle
 
     public bool CollideWithPlayer(Player player)
     {
+        bool collides = false;
         // Implement the logic for checking collision with the player here
-        return false; // Placeholder, replace with actual collision logic
+        if(Obstacle.X == Player.X & Obstacle.Y = Player.Y){
+            collides = true;
+        }
+        return collides; // Placeholder, replace with actual collision logic
     }
 
     public void Render()
@@ -108,26 +113,93 @@ class Obstacle
     }
 }
 
+public enum Game_state{
+    inGame,
+    MainMenu,
+    Pause,
+    GameOver,
+    Closing
+
+}
+
 class Program
 {
     static void Main()
     {
         Player player = new Player(10, 10);
+        Game_state gameState = Game_state.MainMenu; // Initial game state
 
         ConsoleKeyInfo keyInfo;
 
         do
         {
             Console.Clear();
-            Console.SetCursorPosition(player.X, player.Y);
-            Console.Write("P");
 
-            keyInfo = Console.ReadKey();
-            player.Move(keyInfo.Key);
+            // Handle different game states
+            switch (gameState)
+            {
+                case Game_state.MainMenu:
+                    Console.WriteLine("Main Menu");
+                    // Implement main menu logic and rendering here
+                    keyInfo = Console.ReadKey();
+                    if (keyInfo.Key == ConsoleKey.Escape){
+                        gameState = Game_state.Closing;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.Enter){
+                        gameState = Game_state.inGame;
+                    }
+                    break;
 
-            Thread.Sleep(5); // Add a short delay to control the speed of the game
+                case Game_state.inGame:
+                    Console.SetCursorPosition(player.X, player.Y);
+                    Console.Write("P");
 
-        } while (keyInfo.Key != ConsoleKey.Escape);
+                    keyInfo = Console.ReadKey();
+                    player.Move(keyInfo.Key);
+
+                    // Check for state transition conditions (e.g., game over)
+                    if (GameIsOverCondition())
+                    {
+                        gameState = Game_state.GameOver;
+                    }
+                    if (keyInfo.Key == ConsoleKey.Escape){
+                        gameState = Game_state.MainMenu;
+                    }
+
+                    Thread.Sleep(5); // Add a short delay to control the speed of the game
+                    break;
+
+                case Game_state.Pause:
+                    Console.WriteLine("Game Paused");
+                    // Implement pause menu logic and rendering here
+                    keyInfo = Console.ReadKey();
+                    if (keyInfo.Key == ConsoleKey.Escape)
+                    {
+                        gameState = Game_state.inGame; // Resume game
+                    }
+                    break;
+
+                case Game_state.GameOver:
+                    Console.WriteLine("Game Over");
+                    // Implement game over logic and rendering here
+                    keyInfo = Console.ReadKey();
+                    if (keyInfo.Key == ConsoleKey.Escape)
+                    {
+                        gameState = Game_state.MainMenu; // Go back to the main menu
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+        } while (gameState != Game_state.Closing);
+    }
+
+    // Placeholder method for a game over condition (replace with your actual logic)
+    static bool GameIsOverCondition()
+    {
+        // Implement the actual condition for when the game is over
+        return false;
     }
 }
-
