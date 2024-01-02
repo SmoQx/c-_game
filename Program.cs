@@ -56,7 +56,7 @@ class Player
         VelocityY = 4; // Adjust the jump height
     }
 
-    private void ApplyGravity(int mapHeight)
+    public void ApplyGravity(int mapHeight)
     {
         if (IsJumping)
         {
@@ -64,6 +64,9 @@ class Player
             if (Y - VelocityY >= 0)
             {
                 Y -= VelocityY;
+                VelocityY--; // Simulate gravity by decreasing the velocity
+                Console.SetCursorPosition(0,0);
+                Console.Write("####");
             }
             else
             {
@@ -71,33 +74,49 @@ class Player
                 IsJumping = false;
             }
 
-            VelocityY--; // Simulate gravity by decreasing the velocity
         }
-        else if (Y < mapHeight - 1) // Prevent going below the ground
+        if (Y > mapHeight - 1) // Prevent going below the ground
         {
             int newY = Y + VelocityY;
-
             if (newY < mapHeight - 1)
             {
-                Y = newY;
+                Y = mapHeight-2;
+                Console.SetCursorPosition(0,51);
+                Console.Write("{0}", newY);
             }
             else
             {
-                Y = mapHeight - 1;
+                Y = mapHeight - 2;
                 VelocityY = 0; // Stop further descent when on the ground
             }
-
-            VelocityY--; // Simulate gravity by decreasing the velocity
-        }
-        else
-        {
-            VelocityY = 0; // Stop further descent when on the ground
+            IsJumping = false;
         }
     }
 }
 
-class Map
-{
+class Obsticle  {
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+
+    public Obsticle(int x, int y, int height, int width){
+        Width = width;
+        Height = height;
+        X = x;
+        Y = y;
+    }
+    public void Render(){
+        for (int j = 0; j < Width; j++){ 
+            for (int i = 0; i < Height; i++){
+                Console.SetCursorPosition(X + i, Y + j);
+                Console.Write("*");
+            }
+        }
+    }
+}
+
+class Map {
     public int Width { get; set; }
     public int Height { get; set; }
 
@@ -117,8 +136,7 @@ class Map
         CeilingHeight = 2;
     }
 
-    public void Render()
-    {
+    public void Render() {
         // Implement the map rendering logic here, including ground, walls, and ceiling
         for (int i = 0; i < GroundHeight; i++)
         {
@@ -151,8 +169,7 @@ class Map
     }
 }
 
-public enum Game_state
-{
+public enum Game_state {
     inGame,
     MainMenu,
     Pause,
@@ -160,12 +177,12 @@ public enum Game_state
     Closing
 }
 
-class Program
-{
+class Program {
     static void Main()
     {
-        Map gameMap = new Map(40, 20);
+        Map gameMap = new Map(50, 50);
         Player player = new Player(gameMap.Width / 2, gameMap.Height - gameMap.GroundHeight);
+        Obsticle obsticle = new Obsticle(10, 20, 1, 5);
 
         Game_state gameState = Game_state.MainMenu; // Initial game state
 
@@ -196,10 +213,11 @@ class Program
                 case Game_state.inGame:
                     // Render the map
                     gameMap.Render();
+                    obsticle.Render();
 
                     // Set the cursor position for the player
                     Console.SetCursorPosition(player.X, player.Y);
-                    Console.Write("P");
+                    Console.Write("P{0},{1},{2}", player.X, player.Y, player.IsJumping);
 
                     keyInfo = Console.ReadKey();
                     player.Move(keyInfo.Key, gameMap.Width, gameMap.Height);
