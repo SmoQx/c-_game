@@ -1,0 +1,14 @@
+/home/smoq/Pulpit/game_c#/game/bin/Debug/net8.0/game
+/home/smoq/Pulpit/game_c#/game/bin/Debug/net8.0/game.deps.json
+/home/smoq/Pulpit/game_c#/game/bin/Debug/net8.0/game.runtimeconfig.json
+/home/smoq/Pulpit/game_c#/game/bin/Debug/net8.0/game.dll
+/home/smoq/Pulpit/game_c#/game/bin/Debug/net8.0/game.pdb
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.GeneratedMSBuildEditorConfig.editorconfig
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.AssemblyInfoInputs.cache
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.AssemblyInfo.cs
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.csproj.CoreCompileInputs.cache
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.dll
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/refint/game.dll
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.pdb
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/game.genruntimeconfig.cache
+/home/smoq/Pulpit/game_c#/game/obj/Debug/net8.0/ref/game.dll
