@@ -196,7 +196,7 @@ class Program {
     static async Task Main() {
         Map gameMap = new Map(100, 50);
         Player player = new Player(gameMap.Width / 2, gameMap.Height - gameMap.GroundHeight);
-        Obsticle obsticle = new Obsticle(10, 47, 2, 5);
+        Obsticle obsticle = new Obsticle(10, 44, 2, 5);
 
         Game_state gameState = Game_state.MainMenu; // Initial game state
 
