@@ -1,14 +1,41 @@
 using System;
 using System.Threading;
 
-class Player {
+
+
+class GameObject
+{
     public int X { get; set; }
     public int Y { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public int Weight { get; set; }
+
+    public GameObject(int x, int y, int width, int height, int weight)
+    {
+        X = x;
+        Y = y;
+        Width = width;
+        Height = height;
+        Weight = weight;
+    }
+
+    public bool CollidesWith(GameObject other)
+    {
+        return X < other.X + other.Width &&
+               X + Width > other.X &&
+               Y < other.Y + other.Height &&
+               Y + Height > other.Y;
+    }
+}
+
+
+class Player : GameObject {
     public int VelocityX { get; set; }
     public int VelocityY { get; set; }
     public bool IsJumping { get; set; }
 
-    public Player(int x, int y) {
+    public Player(int x, int y) : base(x, y, 1, 1, 1) {
         X = x;
         Y = y;
         VelocityX = 1;
@@ -16,7 +43,9 @@ class Player {
         IsJumping = false;
     }
 
-    public void Move(ConsoleKey key, int mapWidth, int mapHeight) {
+    public void Move(ConsoleKey key, int mapWidth, int mapHeight, GameObject other) {
+        int newPlayerX = X;
+        int newPlayerY = Y;
         switch (key) {
             case ConsoleKey.LeftArrow:
                 if (X - VelocityX >= 0)
@@ -41,6 +70,15 @@ class Player {
 
             default:
                 break;
+        }
+
+        if (CollidesWith(other)) {
+            // Update player position only if there is no collision
+            X = newPlayerX;
+            if (VelocityY > 0){
+                VelocityY = 0;
+            }
+            Y = newPlayerY;
         }
 
         ApplyGravity(mapHeight);
@@ -82,21 +120,17 @@ class Player {
     }
 }
 
-class Obsticle  {
-    public int Width { get; set; }
-    public int Height { get; set; }
-    public int X { get; set; }
-    public int Y { get; set; }
+class Obsticle : GameObject {
 
-    public Obsticle(int x, int y, int height, int width){
+    public Obsticle(int x, int y, int height, int width) : base(x, y, height, width, 1){
         Width = width;
         Height = height;
         X = x;
         Y = y;
     }
     public void Render(){
-        for (int j = 0; j < Width; j++){ 
-            for (int i = 0; i < Height; i++){
+        for (int j = 0; j < Height; j++){ 
+            for (int i = 0; i < Width; i++){
                 Console.SetCursorPosition(X + i, Y + j);
                 Console.Write("*");
             }
@@ -162,12 +196,12 @@ class Program {
     static async Task Main() {
         Map gameMap = new Map(100, 50);
         Player player = new Player(gameMap.Width / 2, gameMap.Height - gameMap.GroundHeight);
-        Obsticle obsticle = new Obsticle(10, 20, 1, 5);
+        Obsticle obsticle = new Obsticle(10, 47, 2, 5);
 
         Game_state gameState = Game_state.MainMenu; // Initial game state
 
         ConsoleKeyInfo keyInfo;
-
+        Int32 counter = 0;
         while (gameState != Game_state.Closing) {
             Console.Clear();
 
@@ -190,21 +224,25 @@ class Program {
                     // Render the map
                     gameMap.Render();
                     obsticle.Render();
-
+                    
                     // Set the cursor position for the player
                     Console.SetCursorPosition(player.X, player.Y);
                     Console.Write("P{0},{1},{2}", player.X, player.Y, player.IsJumping);
+                    Console.Write(counter);
+
                     if (Console.KeyAvailable){
                         keyInfo = Console.ReadKey();
-//                        if (keyInfo.Key == ConsoleKey.NoName){
-//                            Console.Clear();
-//                        }
-                        player.Move(keyInfo.Key, gameMap.Width, gameMap.Height);
+                        player.Move(keyInfo.Key, gameMap.Width, gameMap.Height, obsticle);
                         if (keyInfo.Key == ConsoleKey.Escape) {
                             gameState = Game_state.MainMenu;
+                        
                         }
                     }
+                    else {
+                        player.Move(ConsoleKey.NoName, gameMap.Width, gameMap.Height, obsticle);
+                    }
                     await Task.Delay(50); // Adjust the delay to control the speed of the game
+                    counter++;
                     break;
 
                 // ... (other cases)
