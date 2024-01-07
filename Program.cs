@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 
-
-
 class GameObject
 {
     public int X { get; set; }
@@ -22,20 +20,22 @@ class GameObject
 
     public bool CollidesWith(GameObject other)
     {
-        return X < other.X + other.Width &&
-               X + Width > other.X &&
-               Y < other.Y + other.Height &&
-               Y + Height > other.Y;
+        return X < other.X + other.Width
+            && X + Width > other.X
+            && Y < other.Y + other.Height
+            && Y + Height > other.Y;
     }
 }
 
-
-class Player : GameObject {
+class Player : GameObject
+{
     public int VelocityX { get; set; }
     public int VelocityY { get; set; }
     public bool IsJumping { get; set; }
 
-    public Player(int x, int y) : base(x, y, 1, 1, 1) {
+    public Player(int x, int y)
+        : base(x, y, 1, 1, 1)
+    {
         X = x;
         Y = y;
         VelocityX = 1;
@@ -43,10 +43,12 @@ class Player : GameObject {
         IsJumping = false;
     }
 
-    public void Move(ConsoleKey key, int mapWidth, int mapHeight, GameObject other) {
+    public void Move(ConsoleKey key, int mapWidth, int mapHeight, GameObject other)
+    {
         int newPlayerX = X;
         int newPlayerY = Y;
-        switch (key) {
+        switch (key)
+        {
             case ConsoleKey.LeftArrow:
                 if (X - VelocityX >= 0)
                 {
@@ -72,10 +74,12 @@ class Player : GameObject {
                 break;
         }
 
-        if (CollidesWith(other)) {
+        if (CollidesWith(other))
+        {
             // Update player position only if there is no collision
             X = newPlayerX;
-            if (VelocityY > 0){
+            if (VelocityY > 0)
+            {
                 VelocityY = 0;
             }
             Y = newPlayerY;
@@ -84,34 +88,41 @@ class Player : GameObject {
         ApplyGravity(mapHeight);
     }
 
-    private void Jump() {
+    private void Jump()
+    {
         IsJumping = true;
         VelocityY = 4; // Adjust the jump height
     }
 
-    public void ApplyGravity(int mapHeight) {
-        if (IsJumping) {
+    public void ApplyGravity(int mapHeight)
+    {
+        if (IsJumping)
+        {
             // Only decrease Y during a jump
-            if (Y - VelocityY >= 0) {
+            if (Y - VelocityY >= 0)
+            {
                 Y -= VelocityY;
                 VelocityY--; // Simulate gravity by decreasing the velocity
-                Console.SetCursorPosition(0,0);
+                Console.SetCursorPosition(0, 0);
                 Console.Write("####");
             }
-            else {
+            else
+            {
                 Y = 0;
                 IsJumping = false;
             }
-
         }
-        if (Y > mapHeight - 1) { // Prevent going below the ground
+        if (Y > mapHeight - 1)
+        { // Prevent going below the ground
             int newY = Y + VelocityY;
-            if (newY < mapHeight - 1) {
-                Y = mapHeight-2;
-                Console.SetCursorPosition(0,51);
+            if (newY < mapHeight - 1)
+            {
+                Y = mapHeight - 2;
+                Console.SetCursorPosition(0, 51);
                 Console.Write("{0}", newY);
             }
-            else {
+            else
+            {
                 Y = mapHeight - 2;
                 VelocityY = 0; // Stop further descent when on the ground
             }
@@ -120,17 +131,23 @@ class Player : GameObject {
     }
 }
 
-class Obsticle : GameObject {
-
-    public Obsticle(int x, int y, int height, int width) : base(x, y, height, width, 1){
+class Obsticle : GameObject
+{
+    public Obsticle(int x, int y, int height, int width)
+        : base(x, y, height, width, 1)
+    {
         Width = width;
         Height = height;
         X = x;
         Y = y;
     }
-    public void Render(){
-        for (int j = 0; j < Height; j++){ 
-            for (int i = 0; i < Width; i++){
+
+    public void Render()
+    {
+        for (int j = 0; j < Height; j++)
+        {
+            for (int i = 0; i < Width; i++)
+            {
                 Console.SetCursorPosition(X + i, Y + j);
                 Console.Write("*");
             }
@@ -138,7 +155,8 @@ class Obsticle : GameObject {
     }
 }
 
-class Map {
+class Map
+{
     public int Width { get; set; }
     public int Height { get; set; }
 
@@ -147,7 +165,8 @@ class Map {
     public int WallWidth { get; set; }
     public int CeilingHeight { get; set; }
 
-    public Map(int width, int height) {
+    public Map(int width, int height)
+    {
         Width = width;
         Height = height;
 
@@ -157,17 +176,22 @@ class Map {
         CeilingHeight = 2;
     }
 
-    public void Render() {
+    public void Render()
+    {
         // Implement the map rendering logic here, including ground, walls, and ceiling
-        for (int i = 0; i < GroundHeight; i++) {
+        for (int i = 0; i < GroundHeight; i++)
+        {
             Console.SetCursorPosition(0, Height - i - 1);
-            for (int j = 0; j < Width; j++) {
+            for (int j = 0; j < Width; j++)
+            {
                 Console.Write("-");
             }
         }
 
-        for (int i = 0; i < WallWidth; i++) {
-            for (int j = 0; j < Height - GroundHeight - CeilingHeight; j++) {
+        for (int i = 0; i < WallWidth; i++)
+        {
+            for (int j = 0; j < Height - GroundHeight - CeilingHeight; j++)
+            {
                 Console.SetCursorPosition(i, j);
                 Console.Write("|");
                 Console.SetCursorPosition(Width - i - 1, j);
@@ -175,16 +199,19 @@ class Map {
             }
         }
 
-        for (int i = 0; i < CeilingHeight; i++) {
+        for (int i = 0; i < CeilingHeight; i++)
+        {
             Console.SetCursorPosition(0, i);
-            for (int j = 0; j < Width; j++) {
+            for (int j = 0; j < Width; j++)
+            {
                 Console.Write("-");
             }
         }
     }
 }
 
-public enum Game_state {
+public enum Game_state
+{
     inGame,
     MainMenu,
     Pause,
@@ -192,8 +219,10 @@ public enum Game_state {
     Closing
 }
 
-class Program {
-    static async Task Main() {
+class Program
+{
+    static async Task Main()
+    {
         Map gameMap = new Map(100, 50);
         Player player = new Player(gameMap.Width / 2, gameMap.Height - gameMap.GroundHeight);
         Obsticle obsticle = new Obsticle(10, 44, 2, 5);
@@ -202,20 +231,24 @@ class Program {
 
         ConsoleKeyInfo keyInfo;
         Int32 counter = 0;
-        while (gameState != Game_state.Closing) {
+        while (gameState != Game_state.Closing)
+        {
             Console.Clear();
 
             // Handle different game states
-            switch (gameState) {
+            switch (gameState)
+            {
                 case Game_state.MainMenu:
                     Console.WriteLine("Main Menu");
                     // Implement main menu logic and rendering here
                     keyInfo = Console.ReadKey();
-                    if (keyInfo.Key == ConsoleKey.Enter) {
+                    if (keyInfo.Key == ConsoleKey.Enter)
+                    {
                         gameState = Game_state.inGame;
                         Console.WriteLine("Now Playing {0}", gameState);
                     }
-                    else if (keyInfo.Key == ConsoleKey.Escape) {
+                    else if (keyInfo.Key == ConsoleKey.Escape)
+                    {
                         gameState = Game_state.Closing;
                     }
                     break;
@@ -224,21 +257,23 @@ class Program {
                     // Render the map
                     gameMap.Render();
                     obsticle.Render();
-                    
+
                     // Set the cursor position for the player
                     Console.SetCursorPosition(player.X, player.Y);
                     Console.Write("P{0},{1},{2}", player.X, player.Y, player.IsJumping);
                     Console.Write(counter);
 
-                    if (Console.KeyAvailable){
+                    if (Console.KeyAvailable)
+                    {
                         keyInfo = Console.ReadKey();
                         player.Move(keyInfo.Key, gameMap.Width, gameMap.Height, obsticle);
-                        if (keyInfo.Key == ConsoleKey.Escape) {
+                        if (keyInfo.Key == ConsoleKey.Escape)
+                        {
                             gameState = Game_state.MainMenu;
-                        
                         }
                     }
-                    else {
+                    else
+                    {
                         player.Move(ConsoleKey.NoName, gameMap.Width, gameMap.Height, obsticle);
                     }
                     await Task.Delay(50); // Adjust the delay to control the speed of the game
@@ -246,8 +281,7 @@ class Program {
                     break;
 
                 // ... (other cases)
-
             }
-        } 
+        }
     }
 }
