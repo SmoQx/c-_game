@@ -8,5 +8,4 @@ class Obstacle : GameObject
         X = x;
         Y = y;
     }
-
 }

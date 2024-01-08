@@ -5,7 +5,7 @@ class GameObject
     public int Width { get; set; }
     public int Height { get; set; }
     public int Weight { get; set; }
-    public char Symbol {get; set; }
+    public char Symbol { get; set; }
 
     public GameObject(int x, int y, int width, int height, int weight)
     {
@@ -36,7 +36,4 @@ class GameObject
             }
         }
     }
-
 }
-
-
