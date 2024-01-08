@@ -8,6 +8,7 @@ class GameObject
     public int Width { get; set; }
     public int Height { get; set; }
     public int Weight { get; set; }
+    public char Symbol {get; set; }
 
     public GameObject(int x, int y, int width, int height, int weight)
     {
@@ -25,6 +26,20 @@ class GameObject
             && Y < other.Y + other.Height
             && Y + Height > other.Y;
     }
+
+    public void Render(char symbol)
+    {
+        Symbol = symbol;
+        for (int j = 0; j < Height; j++)
+        {
+            for (int i = 0; i < Width; i++)
+            {
+                Console.SetCursorPosition(X + i, Y - j);
+                Console.Write(Symbol);
+            }
+        }
+    }
+
 }
 
 class Player : GameObject
@@ -34,7 +49,7 @@ class Player : GameObject
     public bool IsJumping { get; set; }
 
     public Player(int x, int y)
-        : base(x, y, 1, 1, 1)
+        : base(x, y, 2, 2, 1)
     {
         X = x;
         Y = y;
@@ -142,17 +157,6 @@ class Obsticle : GameObject
         Y = y;
     }
 
-    public void Render()
-    {
-        for (int j = 0; j < Height; j++)
-        {
-            for (int i = 0; i < Width; i++)
-            {
-                Console.SetCursorPosition(X + i, Y + j);
-                Console.Write("*");
-            }
-        }
-    }
 }
 
 class Map
@@ -256,11 +260,9 @@ class Program
                 case Game_state.inGame:
                     // Render the map
                     gameMap.Render();
-                    obsticle.Render();
-
+                    obsticle.Render('*');
+                    player.Render('P');
                     // Set the cursor position for the player
-                    Console.SetCursorPosition(player.X, player.Y);
-                    Console.Write("P{0},{1},{2}", player.X, player.Y, player.IsJumping);
                     Console.Write(counter);
 
                     if (Console.KeyAvailable)
