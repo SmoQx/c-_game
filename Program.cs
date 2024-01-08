@@ -49,7 +49,7 @@ class Player : GameObject
     public bool IsJumping { get; set; }
 
     public Player(int x, int y)
-        : base(x, y, 2, 2, 1)
+        : base(x, y, 3, 3, 1)
     {
         X = x;
         Y = y;
