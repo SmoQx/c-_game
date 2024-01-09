@@ -50,7 +50,6 @@ public class Game
                 case GameState.InGame:
                     foreach (var element in elements)
                         element.Render();
-
                     var key = ConsoleKey.NoName;
                     if (Console.KeyAvailable)
                         key = Console.ReadKey().Key;
@@ -86,7 +85,8 @@ public class Game
 
     private void Move(int x)
     {
-        // todo
+        playerPosition.X = playerPosition.X + x;
+        Console.Write(playerPosition.X);
     }
 
     private void Jump()
