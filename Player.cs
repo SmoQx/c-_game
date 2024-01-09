@@ -1,17 +1,19 @@
-public class Player : GameObject
+class Player : GameObject
 {
     public int VelocityX { get; set; }
     public int VelocityY { get; set; }
     public bool IsJumping { get; set; }
 
-    public Player()
-        : base('P', 2, 2)
+    public Player(int x, int y)
+        : base(x, y, 2, 2, 1)
     {
+        X = x;
+        Y = y;
         VelocityX = 1;
         VelocityY = 0;
+        IsJumping = false;
     }
 
-    /*
     public void Move(ConsoleKey key, int mapWidth, int mapHeight, GameObject other)
     {
         int newPlayerX = X;
@@ -98,5 +100,4 @@ public class Player : GameObject
             IsJumping = false;
         }
     }
-*/
 }
