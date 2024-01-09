@@ -1,21 +1,17 @@
-class GameObject
+public abstract class GameObject
 {
-    public int X { get; set; }
-    public int Y { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
-    public int Weight { get; set; }
-    public char Symbol { get; set; }
+    public char Symbol { get; }
 
-    public GameObject(int x, int y, int width, int height, int weight)
+    public GameObject(char symbol, int width, int height)
     {
-        X = x;
-        Y = y;
+        Symbol = symbol;
         Width = width;
         Height = height;
-        Weight = weight;
     }
 
+    /*
     public bool CollidesWith(GameObject other)
     {
         return X < other.X + other.Width
@@ -23,20 +19,19 @@ class GameObject
             && Y < other.Y + other.Height
             && Y + Height > other.Y;
     }
+    */
 
-    public void Render(char symbol)
+    public virtual void Render()
     {
-        Symbol = symbol;
-        for (int j = 0; j < Height; j++)
+        var (x, y) = Console.GetCursorPosition();
+        var width = new String(Enumerable.Repeat(Symbol, Width).ToArray());
+
+        for (var i = 0; i < Height; i++)
         {
-            for (int i = 0; i < Width; i++)
-            {
-                Console.SetCursorPosition(X + i, Y - j);
-                Console.Write(Symbol);
-            }
+            Console.SetCursorPosition(x, y+i);
+            Console.Write(width);
         }
+
+        Console.SetCursorPosition(x, y);
     }
-
 }
-
-

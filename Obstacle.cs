@@ -1,12 +1,7 @@
-class Obstacle : GameObject
+public class Obstacle : GameObject
 {
-    public Obstacle(int x, int y, int height, int width)
-        : base(x, y, height, width, 1)
+    public Obstacle(int height, int width)
+        : base('*', height, width)
     {
-        Width = width;
-        Height = height;
-        X = x;
-        Y = y;
     }
-
 }
