@@ -4,4 +4,5 @@ public class Obstacle : GameObject
         : base('*', height, width)
     {
     }
+
 }

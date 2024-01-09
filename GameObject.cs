@@ -2,7 +2,8 @@ public abstract class GameObject
 {
     public int Width { get; set; }
     public int Height { get; set; }
-    public char Symbol { get; }
+    public int Weight { get; set; }
+    public char Symbol {get; set; }
 
     public GameObject(char symbol, int width, int height)
     {
@@ -34,4 +35,7 @@ public abstract class GameObject
 
         Console.SetCursorPosition(x, y);
     }
+
 }
+
+
