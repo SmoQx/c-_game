@@ -3,7 +3,6 @@ public class Game
     private List<Element> elements;
     private Player player;
     private Position playerPosition;
-
     private GameState gameState;
 
     public Game(int width, int height)
@@ -49,7 +48,9 @@ public class Game
 
                 case GameState.InGame:
                     foreach (var element in elements)
+                    {
                         element.Render();
+                    }
                     var key = ConsoleKey.NoName;
                     if (Console.KeyAvailable)
                         key = Console.ReadKey().Key;
@@ -83,9 +84,13 @@ public class Game
         }
     }
 
-    private void Move(int x)
+    public void Move(int x)
     {
-        playerPosition.X = playerPosition.X + x;
+        int newX = playerPosition.X + x;
+            if (newX >= 0 && newX <= 100 - player.Width)
+            {
+                playerPosition.X = newX;
+            }
         Console.Write(playerPosition.X);
     }
 
