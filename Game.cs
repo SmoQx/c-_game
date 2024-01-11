@@ -67,13 +67,13 @@ public class Game
                             Move(1);
                             break;
                         case ConsoleKey.Spacebar:
-                            Jump();
+                            Jump(4);
                             break;
 
                     }
                     // player.Move(key, gameMap.Width, gameMap.Height, obstacle);
 
-                    await Task.Delay(50); // Adjust the delay to control the speed of the game
+                    await Task.Delay(150); // Adjust the delay to control the speed of the game
 
                     break;
 
@@ -86,16 +86,35 @@ public class Game
 
     public void Move(int x)
     {
-        int newX = playerPosition.X + x;
+        int newX = elements[0].Pos.X + x;
             if (newX >= 0 && newX <= 100 - player.Width)
             {
                 playerPosition.X = newX;
             }
-        Console.Write(playerPosition.X);
     }
 
-    private void Jump()
+    private void Jump(int y)
     {
-        // todo
+        int veloY = y;
+        for (int i = 0; veloY >= i; veloY--){
+            Console.Write(i);
+            int newY = playerPosition.Y - veloY;
+            if (newY <= 50){
+                playerPosition.Y = newY;
+
+            }
+            Console.Write(playerPosition.Y);
+        }
+    }
+
+    private int Gravity()
+    {
+        //todo
+        return 0;
+    }
+
+    private void OnTheFloor()
+    {
+        //todo
     }
 }
