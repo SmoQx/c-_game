@@ -1,5 +1,5 @@
 public class Obstacle : GameObject
 {
-    public Obstacle(int height, int width)
-        : base('*', height, width) { }
+    public Obstacle(int height, int width, bool gravity = false)
+        : base('*', height, width, gravity) { }
 }

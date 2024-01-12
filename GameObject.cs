@@ -3,12 +3,14 @@ public abstract class GameObject
     public int Width { get; set; }
     public int Height { get; set; }
     public char Symbol { get; }
+    public bool Gravity { get; set; }
 
-    public GameObject(char symbol, int width, int height)
+    public GameObject(char symbol, int width, int height, bool gravity = false)
     {
         Symbol = symbol;
         Width = width;
         Height = height;
+        Gravity = gravity;
     }
 
     /*

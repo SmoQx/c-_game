@@ -5,9 +5,9 @@ public class Player : GameObject
     public bool IsJumping { get; set; }
 
     public Player()
-        : base('P', 2, 2)
+        : base('P', 2, 2, gravity: true)
     {
         VelocityX = 1;
-        VelocityY = 1;
+        VelocityY = 0;
     }
 }
