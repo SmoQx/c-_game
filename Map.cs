@@ -14,9 +14,9 @@ public class Map
         Height = height;
 
         // Set default properties for ground, walls, and ceiling
-        GroundHeight = 2;
+        GroundHeight = 1;
         WallWidth = 1;
-        CeilingHeight = 2;
+        CeilingHeight = 1;
     }
 
     public void Render()

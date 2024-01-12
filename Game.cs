@@ -4,11 +4,16 @@ public class Game
     private Player player;
     private Position playerPosition;
     private GameState gameState;
+    private int gamesizeX;
+    private int gamesizeY;
+    private Map map;
 
     public Game(int width, int height)
     {
+        gamesizeX = width;
+        gamesizeY = height;
         elements = new List<Element>();
-
+        map = new Map(gamesizeX, gamesizeY);
         player = new Player();
         playerPosition = new Position(width / 2, height - player.Height);
         elements.Add(new Element(player, playerPosition));
@@ -51,6 +56,7 @@ public class Game
                     {
                         element.Render();
                     }
+                    map.Render();
                     var key = ConsoleKey.NoName;
                     if (Console.KeyAvailable)
                         key = Console.ReadKey().Key;
@@ -61,19 +67,18 @@ public class Game
                             gameState = GameState.MainMenu;
                             break;
                         case ConsoleKey.LeftArrow:
-                            Move(-1);
+                            Move(-player.VelocityX);
                             break;
                         case ConsoleKey.RightArrow:
-                            Move(1);
+                            Move(player.VelocityX);
                             break;
                         case ConsoleKey.Spacebar:
-                            Jump(4);
+                            Jump(player.VelocityY);
                             break;
-
                     }
-                    // player.Move(key, gameMap.Width, gameMap.Height, obstacle);
+                    CollidesWith();
 
-                    await Task.Delay(150); // Adjust the delay to control the speed of the game
+                    await Task.Delay(10); // Adjust the delay to control the speed of the game
 
                     break;
 
@@ -84,26 +89,22 @@ public class Game
         }
     }
 
-    public void Move(int x)
+    private void Move(int x)
     {
         int newX = elements[0].Pos.X + x;
-            if (newX >= 0 && newX <= 100 - player.Width)
-            {
-                playerPosition.X = newX;
-            }
+        if (newX >= 0 && newX <= gamesizeX - player.Width)
+        {
+            playerPosition.X = newX;
+        }
     }
 
     private void Jump(int y)
     {
         int veloY = y;
-        for (int i = 0; veloY >= i; veloY--){
-            Console.Write(i);
-            int newY = playerPosition.Y - veloY;
-            if (newY <= 50){
-                playerPosition.Y = newY;
-
-            }
-            Console.Write(playerPosition.Y);
+        int newY = playerPosition.Y - veloY;
+        if (newY <= 50)
+        {
+            playerPosition.Y = newY;
         }
     }
 
@@ -113,8 +114,35 @@ public class Game
         return 0;
     }
 
-    private void OnTheFloor()
+    private void CollidesWith()
     {
-        //todo
+        Console.Write(playerPosition.X);
+        Console.WriteLine(playerPosition.Y);
+        var colidesX = false;
+        var colidesY = false;
+        foreach (var element in elements)
+        {
+            if (element == elements[0])
+                continue;
+            if (
+                playerPosition.X + player.Width > element.Pos.X
+                && playerPosition.X < element.Pos.X + element.Object.Width
+            )
+            {
+                colidesX = true;
+            }
+            Console.WriteLine(element.Pos.Y + element.Object.Height - 1);
+            if (
+                playerPosition.Y < element.Pos.Y + element.Object.Height
+                && playerPosition.Y + player.Height - 1 >= element.Pos.Y
+            )
+            {
+                colidesY = true;
+            }
+            if (colidesY && colidesX)
+            {
+                Console.Write("colides");
+            }
+        }
     }
 }

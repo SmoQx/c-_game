@@ -28,7 +28,7 @@ public abstract class GameObject
 
         for (var i = 0; i < Height; i++)
         {
-            Console.SetCursorPosition(x, y+i);
+            Console.SetCursorPosition(x, y + i);
             Console.Write(width);
         }
 

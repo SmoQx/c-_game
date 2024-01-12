@@ -8,6 +8,6 @@ public class Player : GameObject
         : base('P', 2, 2)
     {
         VelocityX = 1;
-        VelocityY = 0;
+        VelocityY = 1;
     }
 }
