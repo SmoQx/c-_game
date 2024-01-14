@@ -17,8 +17,8 @@ public class Game
         player = new Player();
         playerPosition = new Position(width / 2, height - player.Height);
         elements.Add(new Element(player, playerPosition));
-        elements.Add(new Element(new Obstacle(2, 3, true), new Position(20, 13)));
-        elements.Add(new Element(new Obstacle(2, 2, true), new Position(8, 13)));
+        elements.Add(new Element(new Obstacle(2, 3, true), new Position(20, 14)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(8, 13)));
         elements.Add(new Element(new Obstacle(10, 2), new Position(10, 17)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(15, 8)));
 
@@ -108,8 +108,19 @@ public class Game
     private void Jump(int y)
     {
         int veloY = y;
+        for (int i = y; i >= 0; i--)
+            if ((CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - i }, elements[0])))
+            {
+                continue;
+            }
+            else
+            {
+                veloY = i;
+                break;
+            }
+        Console.Write(veloY);
         int newY = playerPosition.Y - veloY;
-        if (!(CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - y }, elements[0])))
+        if (!(CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - veloY }, elements[0])))
             if (newY <= 50)
             {
                 playerPosition.Y = newY;
