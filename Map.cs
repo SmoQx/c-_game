@@ -24,7 +24,7 @@ public class Map
         // Implement the map rendering logic here, including ground, walls, and ceiling
         for (int i = 0; i < GroundHeight; i++)
         {
-            Console.SetCursorPosition(0, Height - i );
+            Console.SetCursorPosition(0, Height - i);
             for (int j = 0; j < Width; j++)
             {
                 Console.Write("-");

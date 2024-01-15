@@ -12,7 +12,7 @@ public abstract class GameObject
         Width = width;
         Height = height;
         Gravity = gravity;
-        WinCon = winCon; 
+        WinCon = winCon;
     }
 
     /*
