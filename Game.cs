@@ -72,13 +72,13 @@ public class Game
                             gameState = GameState.MainMenu;
                             break;
                         case ConsoleKey.LeftArrow:
-                            await Move(-player.VelocityX);
+                            Move(-player.VelocityX);
                             break;
                         case ConsoleKey.RightArrow:
-                            await Move(player.VelocityX);
+                            Move(player.VelocityX);
                             break;
                         case ConsoleKey.Spacebar:
-                            await Jump(player.VelocityY = 3);
+                            Jump(player.VelocityY = 3);
                             break;
                     }
                     if (Win(new List<int> { playerPosition.X, playerPosition.Y }, elements[0]))
@@ -114,7 +114,7 @@ public class Game
         }
     }
 
-    private async Task Move(int x)
+    private void Move(int x)
     {
         int newX = elements[0].Pos.X + x;
         int oldX = playerPosition.X;
@@ -125,7 +125,7 @@ public class Game
             }
     }
 
-    private async Task Jump(int y)
+    private void Jump(int y)
     {
         int veloY = y;
         for (int i = 0; i <= y; i++)
@@ -153,7 +153,7 @@ public class Game
             }
     }
 
-    private async void Gravity()
+    private void Gravity()
     {
         int player_velo_y = player.VelocityY;
         foreach (var element in elements)
@@ -166,7 +166,7 @@ public class Game
             {
                 Console.Write(player.VelocityY + player_velo_y);
                 player.VelocityY--;
-                await Jump(player_velo_y);
+                Jump(player_velo_y);
             }
             else if (
                 element.Object.Gravity
