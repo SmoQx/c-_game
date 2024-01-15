@@ -17,10 +17,11 @@ public class Game
         player = new Player();
         playerPosition = new Position(width / 2, height - player.Height);
         elements.Add(new Element(player, playerPosition));
-        elements.Add(new Element(new Obstacle(2, 3, true), new Position(20, 14)));
+        elements.Add(new Element(new WinObject(2, 2, winCon: true), new Position(19, 13)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(8, 13)));
         elements.Add(new Element(new Obstacle(10, 2), new Position(10, 17)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(15, 8)));
+        elements.Add(new Element(new Obstacle(20, 3), new Position(20, 10)));
 
         gameState = GameState.MainMenu;
     }
@@ -59,7 +60,7 @@ public class Game
                     {
                         element.Render();
                     }
-                    //map.Render();
+                    map.Render();
                     var key = ConsoleKey.NoName;
                     if (Console.KeyAvailable)
                         key = Console.ReadKey().Key;
@@ -76,17 +77,35 @@ public class Game
                             Move(player.VelocityX);
                             break;
                         case ConsoleKey.Spacebar:
-                            Jump(player.VelocityY = 5);
-                            break;
-                        case ConsoleKey.DownArrow:
-                            Jump(-player.VelocityY);
+                            Jump(player.VelocityY = 4);
                             break;
                     }
+                    if (Win(new List<int> { playerPosition.X, playerPosition.Y }, elements[0]))
+                    {
+                        gameState = GameState.GameOver;
+                    }
                     Gravity();
-                    await Task.Delay(50); // Adjust the delay to control the speed of the game
+                    await Task.Delay(16); // Adjust the delay to control the speed of the game
 
                     break;
 
+                case GameState.GameOver:
+                    Console.WriteLine("You win!!");
+                    Console.WriteLine("Press ENTER to continue");
+                    Console.WriteLine("Press esc to exit");
+                    switch (Console.ReadKey().Key)
+                    {
+                        case ConsoleKey.Escape:
+                            gameState = GameState.Closing;
+                            break;
+                        case ConsoleKey.Enter:
+                            playerPosition.X = gamesizeX / 2;
+                            gameState = GameState.MainMenu;
+                            break;
+                    }
+
+                    break;
+                
                 default:
                     // ... (other cases)
                     break;
@@ -108,20 +127,19 @@ public class Game
     private void Jump(int y)
     {
         int veloY = y;
-        for (int i = y; i >= 0; i--)
+        for (int i = 0; i <= y; i++)
             if ((CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - i }, elements[0])))
             {
-                continue;
+                veloY = i - 1;
+                break;
             }
             else
             {
-                veloY = i;
-                break;
+                continue;
             }
-        Console.Write(veloY);
-        int newY = playerPosition.Y - veloY;
-        if (!(CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - veloY }, elements[0])))
-            if (newY <= 50)
+        int newY = playerPosition.Y - veloY - 1;
+        if (!(CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - veloY}, elements[0])))
+            if (newY <= 50 && newY >= 0)
             {
                 playerPosition.Y = newY;
             }
@@ -140,6 +158,7 @@ public class Game
             {
                 element.Pos.Y = element.Pos.Y + 1;
             }
+            Thread.Sleep(8);
         }
     }
 
@@ -147,7 +166,7 @@ public class Game
     {
         foreach (var otherElement in elements)
         {
-            if (otherElement != currentElement)
+            if (otherElement != currentElement && otherElement.Object.WinCon == false)
             {
                 if (
                     pos[0] + currentElement.Object.Width > otherElement.Pos.X
@@ -162,4 +181,24 @@ public class Game
         }
         return false; // No collision
     }
-}
+    
+    private bool Win(List<int> pos, Element currentElement)
+    {
+        foreach (var otherElement in elements)
+        {
+            if (otherElement != currentElement && otherElement.Object.WinCon == true)
+            {
+                if (
+                    pos[0] + currentElement.Object.Width > otherElement.Pos.X
+                    && pos[0] < otherElement.Pos.X + otherElement.Object.Width
+                    && pos[1] < otherElement.Pos.Y + otherElement.Object.Height
+                    && pos[1] + currentElement.Object.Height > otherElement.Pos.Y
+                )
+                {
+                    return true; // Collision detected
+                }
+            }
+        }
+        return false;
+    }
+}   

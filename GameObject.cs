@@ -4,13 +4,15 @@ public abstract class GameObject
     public int Height { get; set; }
     public char Symbol { get; }
     public bool Gravity { get; set; }
+    public bool WinCon { get; }
 
-    public GameObject(char symbol, int width, int height, bool gravity = false)
+    public GameObject(char symbol, int width, int height, bool gravity = false, bool winCon = false)
     {
         Symbol = symbol;
         Width = width;
         Height = height;
         Gravity = gravity;
+        WinCon = winCon; 
     }
 
     /*
@@ -30,8 +32,13 @@ public abstract class GameObject
 
         for (var i = 0; i < Height; i++)
         {
+            if (WinCon == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
             Console.SetCursorPosition(x, y + i);
             Console.Write(width);
+            Console.ResetColor();
         }
 
         Console.SetCursorPosition(x, y);
