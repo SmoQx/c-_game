@@ -50,6 +50,8 @@ public class Game
                 case GameState.MainMenu:
                     Console.WriteLine("Main Menu");
 
+                    Console.WriteLine("Press ENTER to play");
+                    Console.WriteLine("Press esc to exit");
                     // Implement main menu logic and rendering here
                     var keyInfo = Console.ReadKey();
 
