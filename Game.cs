@@ -17,13 +17,25 @@ public class Game
         player = new Player();
         playerPosition = new Position(width / 2, gamesizeY - player.Height);
         elements.Add(new Element(player, playerPosition));
-        //elements.Add(new Element(new WinObject(2, 2, winCon: true), new Position(19, 13)));
-        elements.Add(new Element(new Obstacle(2, 2), new Position(width / 2, 15)));
-        elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(8, 13)));
-        elements.Add(new Element(new Obstacle(10, 2), new Position(12, 17)));
+        elements.Add(new Element(new WinObject(1, 1, winCon: true), new Position(19, 0 + 5)));
+        elements.Add(new Element(new Obstacle(5, 2, gravity: true), new Position(gamesizeX - 10, gamesizeY - 17)));
+        elements.Add(new Element(new Obstacle(4, 2), new Position(32, gamesizeY - 25)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(39, 7)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(42, 12)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(37, 14)));
+        elements.Add(new Element(new Obstacle(8, 2), new Position(23, 3)));
+        elements.Add(new Element(new Obstacle(5, 2), new Position(gamesizeX / 2 + 3, gamesizeY - 4)));
+        elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(gamesizeX / 2, 13)));
+        elements.Add(new Element(new Obstacle(2, 10, gravity: true), new Position(gamesizeX - 10, gamesizeY - 15)));
+        elements.Add(new Element(new Obstacle(5, 2), new Position(9, gamesizeY - 28)));
+        elements.Add(new Element(new Obstacle(4, 2), new Position(12, gamesizeY - 23)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(9, gamesizeY - 18)));
+        elements.Add(new Element(new Obstacle(1, 2), new Position(12, gamesizeY - 13)));
+        elements.Add(new Element(new Obstacle(3, 2), new Position(9, gamesizeY - 8)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(12, gamesizeY - 3)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(15, 8)));
-
-        gameState = GameState.MainMenu;
+   
+        gameState = GameState.MainMenu; 
     }
 
     public async Task Run()
@@ -77,10 +89,6 @@ public class Game
                             case ConsoleKey.RightArrow:
                                 Move(player.VelocityX);
                                 break;
-                            case ConsoleKey.R:
-                                playerPosition.Y = gamesizeY - player.Height;
-                                playerPosition.X = gamesizeX / 2;
-                                break;
                             case ConsoleKey.Spacebar:
                                 if (player.IsJumping == false)
                                     Jump(player.VelocityY = 2);
@@ -92,17 +100,17 @@ public class Game
                     {
                         gameState = GameState.GameOver;
                     }
-                    Console.SetCursorPosition(51,0);
+                    Console.SetCursorPosition(gamesizeX,0);
                     Console.WriteLine("Velocity Y" + player.VelocityY + ",");
-                    Console.SetCursorPosition(51,1);
+                    Console.SetCursorPosition(gamesizeX,1);
                     Console.WriteLine("Is Jumping" + player.IsJumping + ",");
-                    Console.SetCursorPosition(51,2);
+                    Console.SetCursorPosition(gamesizeX,2);
                     Console.WriteLine("player height" + player.Height + ",");
-                    Console.SetCursorPosition(51,3);
+                    Console.SetCursorPosition(gamesizeX,3);
                     Console.WriteLine("Pos Y + height" + playerPosition.Y  + ",");
-                    Console.SetCursorPosition(51,4);
+                    Console.SetCursorPosition(gamesizeX,4);
                     Console.WriteLine("Pos X" + playerPosition.X + ",");
-                    Console.SetCursorPosition(51,5);
+                    Console.SetCursorPosition(gamesizeX,5);
                     Console.WriteLine("Y size" + gamesizeY + ",");
                     Gravity();
                     await Task.Delay(16); // Adjust the delay to control the speed of the game
@@ -119,7 +127,8 @@ public class Game
                             gameState = GameState.Closing;
                             break;
                         case ConsoleKey.Enter:
-                            playerPosition.X = gamesizeX / 2;
+                            playerPosition.X = gamesizeX / 2 - 2;
+                            playerPosition.Y = gamesizeY - player.Height;
                             gameState = GameState.MainMenu;
                             break;
                     }
@@ -189,7 +198,6 @@ public class Game
             else if (player.IsJumping == true && player.VelocityY <= 0)
                 if (playerPosition.Y + player.Height < gamesizeY && !CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0]))
                     playerPosition.Y++;
-            Thread.Sleep(16);
         } 
         if (player.IsJumping == false 
             && playerPosition.Y + player.Height < gamesizeY 
@@ -226,8 +234,8 @@ public class Game
                     element.Pos.Y = element.Pos.Y + 1;
                 }
             }
-            Thread.Sleep(16);
         }
+        Thread.Sleep(24);
     }
 
     private bool CollidesWith(List<int> pos, Element currentElement)
