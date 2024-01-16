@@ -18,6 +18,7 @@ public class Game
         playerPosition = new Position(width / 2, height - player.Height);
         elements.Add(new Element(player, playerPosition));
         //elements.Add(new Element(new WinObject(2, 2, winCon: true), new Position(19, 13)));
+        elements.Add(new Element(new Obstacle(2, 2), new Position(width / 2, 15)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(8, 13)));
         elements.Add(new Element(new Obstacle(10, 2), new Position(12, 17)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(15, 8)));
@@ -76,7 +77,8 @@ public class Game
                             Move(player.VelocityX);
                             break;
                         case ConsoleKey.Spacebar:
-                            Jump(player.VelocityY = 3);
+                            if (player.IsJumping == false)
+                                Jump(player.VelocityY = 3);
                             player.IsJumping = true;
                             break;
                     }
@@ -128,11 +130,12 @@ public class Game
     {
         int veloY = y;
 
-        for (int i = 0; i <= y; i++)
+        for (int i = 0; i < y; i++)
         {
             if (CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - i }, elements[0]))
             {
-                veloY = i + 1;
+                veloY = i - 1;
+                Console.Write(veloY);
                 break;
             }
             else
@@ -143,9 +146,11 @@ public class Game
 
         int newY = playerPosition.Y - veloY;
 
-        if (!CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - veloY }, elements[0]))
+        if (
+            !CollidesWith(new List<int> { playerPosition.X, playerPosition.Y - veloY }, elements[0])
+        )
         {
-            if (newY <= gamesizeY && newY >= 0)
+            if (newY < gamesizeY && newY > 0)
             {
                 playerPosition.Y = newY;
             }
@@ -155,29 +160,30 @@ public class Game
     private void Gravity()
     {
         int player_velo_y = player.VelocityY;
-        for (int i = 0; i > -player.VelocityY; i--)
-        {
-            if (CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + i }, elements[0]))
-            {
-                player.VelocityY = i - player.Height;
-                break;
-            }
-            else
-                continue;
-
-        }
-        if (player.VelocityY > -1)
-        {
-            player.VelocityY = player.VelocityY - 1;
-        }
-
-        int newY = playerPosition.Y + player.Height + player.VelocityY;
-
-        if (newY < gamesizeY - player.Height)
+        if (player.IsJumping == true)
         {
             playerPosition.Y = playerPosition.Y - player_velo_y;
+            player_velo_y = player_velo_y - player.VelocityY;
+            player.IsJumping = false;
         }
 
+        if (
+            playerPosition.Y + player.Height <= gamesizeY + player_velo_y
+            && player.IsJumping == false
+        )
+        {
+            if (CollidesWith(new List<int> { playerPosition.X, playerPosition.Y + 1 }, elements[0]))
+            {
+                player.VelocityY = 0;
+            }
+            else if (playerPosition.Y + player.Height == gamesizeY)
+            {
+                player.VelocityY = 0;
+            }
+
+            playerPosition.Y = playerPosition.Y + player.VelocityY;
+        }
+        Console.Write(player.IsJumping);
 
         foreach (var element in elements)
         {
@@ -189,14 +195,14 @@ public class Game
                 )
                     continue;
                 else if (
-                     element.Object.Gravity
+                    element.Object.Gravity
                     && element.Pos.Y + element.Object.Height < gamesizeY
                 )
                 {
                     element.Pos.Y = element.Pos.Y + 1;
                 }
             }
-            Thread.Sleep(5);
+            Thread.Sleep(16);
         }
     }
 
