@@ -63,28 +63,30 @@ public class Game
                     map.Render();
                     var key = ConsoleKey.NoName;
                     if (Console.KeyAvailable)
-                        key = Console.ReadKey().Key;
-
-                    switch (key)
                     {
-                        case ConsoleKey.Escape:
-                            gameState = GameState.MainMenu;
-                            break;
-                        case ConsoleKey.LeftArrow:
-                            Move(-player.VelocityX);
-                            break;
-                        case ConsoleKey.RightArrow:
-                            Move(player.VelocityX);
-                            break;
-                        case ConsoleKey.R:
-                            playerPosition.Y = gamesizeY - player.Height;
-                            playerPosition.X = gamesizeX / 2;
-                            break;
-                        case ConsoleKey.Spacebar:
-                            if (player.IsJumping == false)
-                                Jump(player.VelocityY = 2);
-                            player.IsJumping = true;
-                            break;
+                        key = Console.ReadKey(true).Key;
+
+                        switch (key)
+                        {
+                            case ConsoleKey.Escape:
+                                gameState = GameState.MainMenu;
+                                break;
+                            case ConsoleKey.LeftArrow:
+                                Move(-player.VelocityX);
+                                break;
+                            case ConsoleKey.RightArrow:
+                                Move(player.VelocityX);
+                                break;
+                            case ConsoleKey.R:
+                                playerPosition.Y = gamesizeY - player.Height;
+                                playerPosition.X = gamesizeX / 2;
+                                break;
+                            case ConsoleKey.Spacebar:
+                                if (player.IsJumping == false)
+                                    Jump(player.VelocityY = 2);
+                                player.IsJumping = true;
+                                break;
+                        }
                     }
                     if (Win(new List<int> { playerPosition.X, playerPosition.Y }, elements[0]))
                     {
@@ -189,6 +191,14 @@ public class Game
                     playerPosition.Y++;
             Thread.Sleep(16);
         } 
+        if (player.IsJumping == false 
+            && playerPosition.Y + player.Height < gamesizeY 
+            && !CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0])
+            && !(CollidesWith(new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y }, elements[0])
+            || CollidesWith(new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y }, elements[0])))
+        {
+            playerPosition.Y++;
+        }
         if ((CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0])
             ||CollidesWith(new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y }, elements[0])
             ||CollidesWith(new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y }, elements[0]))
