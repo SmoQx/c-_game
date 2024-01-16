@@ -18,15 +18,29 @@ public class Game
         playerPosition = new Position(width / 2, gamesizeY - player.Height);
         elements.Add(new Element(player, playerPosition));
         elements.Add(new Element(new WinObject(1, 1, winCon: true), new Position(19, 0 + 5)));
-        elements.Add(new Element(new Obstacle(5, 2, gravity: true), new Position(gamesizeX - 10, gamesizeY - 17)));
+        elements.Add(
+            new Element(
+                new Obstacle(5, 2, gravity: true),
+                new Position(gamesizeX - 10, gamesizeY - 17)
+            )
+        );
         elements.Add(new Element(new Obstacle(4, 2), new Position(32, gamesizeY - 25)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(39, 7)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(42, 12)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(37, 14)));
         elements.Add(new Element(new Obstacle(8, 2), new Position(23, 3)));
-        elements.Add(new Element(new Obstacle(5, 2), new Position(gamesizeX / 2 + 3, gamesizeY - 4)));
-        elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(gamesizeX / 2, 13)));
-        elements.Add(new Element(new Obstacle(2, 10, gravity: true), new Position(gamesizeX - 10, gamesizeY - 15)));
+        elements.Add(
+            new Element(new Obstacle(5, 2), new Position(gamesizeX / 2 + 3, gamesizeY - 4))
+        );
+        elements.Add(
+            new Element(new Obstacle(2, 2, gravity: true), new Position(gamesizeX / 2, 13))
+        );
+        elements.Add(
+            new Element(
+                new Obstacle(2, 10, gravity: true),
+                new Position(gamesizeX - 10, gamesizeY - 15)
+            )
+        );
         elements.Add(new Element(new Obstacle(5, 2), new Position(9, gamesizeY - 28)));
         elements.Add(new Element(new Obstacle(4, 2), new Position(12, gamesizeY - 23)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(9, gamesizeY - 18)));
@@ -34,8 +48,8 @@ public class Game
         elements.Add(new Element(new Obstacle(3, 2), new Position(9, gamesizeY - 8)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(12, gamesizeY - 3)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(15, 8)));
-   
-        gameState = GameState.MainMenu; 
+
+        gameState = GameState.MainMenu;
     }
 
     public async Task Run()
@@ -102,17 +116,17 @@ public class Game
                     {
                         gameState = GameState.GameOver;
                     }
-                    Console.SetCursorPosition(gamesizeX,0);
+                    Console.SetCursorPosition(gamesizeX, 0);
                     Console.WriteLine("Velocity Y" + player.VelocityY + ",");
-                    Console.SetCursorPosition(gamesizeX,1);
+                    Console.SetCursorPosition(gamesizeX, 1);
                     Console.WriteLine("Is Jumping" + player.IsJumping + ",");
-                    Console.SetCursorPosition(gamesizeX,2);
+                    Console.SetCursorPosition(gamesizeX, 2);
                     Console.WriteLine("player height" + player.Height + ",");
-                    Console.SetCursorPosition(gamesizeX,3);
-                    Console.WriteLine("Pos Y + height" + playerPosition.Y  + ",");
-                    Console.SetCursorPosition(gamesizeX,4);
+                    Console.SetCursorPosition(gamesizeX, 3);
+                    Console.WriteLine("Pos Y + height" + playerPosition.Y + ",");
+                    Console.SetCursorPosition(gamesizeX, 4);
                     Console.WriteLine("Pos X" + playerPosition.X + ",");
-                    Console.SetCursorPosition(gamesizeX,5);
+                    Console.SetCursorPosition(gamesizeX, 5);
                     Console.WriteLine("Y size" + gamesizeY + ",");
                     Gravity();
                     await Task.Delay(16); // Adjust the delay to control the speed of the game
@@ -191,33 +205,63 @@ public class Game
         int player_velo_y = player.VelocityY;
 
         if (player.IsJumping == true && playerPosition.Y > 0)
-        { 
+        {
             if (player.VelocityY > 0)
             {
                 player.VelocityY--;
                 Jump(player.VelocityY);
             }
             else if (player.IsJumping == true && player.VelocityY <= 0)
-                if (playerPosition.Y + player.Height < gamesizeY && !CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0]))
+                if (
+                    playerPosition.Y + player.Height < gamesizeY
+                    && !CollidesWith(
+                        new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 },
+                        elements[0]
+                    )
+                )
                     playerPosition.Y++;
-        } 
-        if (player.IsJumping == false 
-            && playerPosition.Y + player.Height < gamesizeY 
-            && !CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0])
-            && !(CollidesWith(new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y }, elements[0])
-            || CollidesWith(new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y }, elements[0])))
+        }
+        if (
+            player.IsJumping == false
+            && playerPosition.Y + player.Height < gamesizeY
+            && !CollidesWith(
+                new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 },
+                elements[0]
+            )
+            && !(
+                CollidesWith(
+                    new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y },
+                    elements[0]
+                )
+                || CollidesWith(
+                    new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y },
+                    elements[0]
+                )
+            )
+        )
         {
             playerPosition.Y++;
         }
-        if ((CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0])
-            ||CollidesWith(new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y }, elements[0])
-            ||CollidesWith(new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y }, elements[0]))
-            || elements[0].Pos.Y + elements[0].Object.Height == gamesizeY
+        if (
+            (
+                CollidesWith(
+                    new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 },
+                    elements[0]
                 )
+                || CollidesWith(
+                    new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y },
+                    elements[0]
+                )
+                || CollidesWith(
+                    new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y },
+                    elements[0]
+                )
+            )
+            || elements[0].Pos.Y + elements[0].Object.Height == gamesizeY
+        )
         {
             player.IsJumping = false;
         }
-
 
         foreach (var element in elements)
         {
