@@ -187,10 +187,9 @@ public class Game
             else if (player.IsJumping == true && player.VelocityY <= 0)
                 if (playerPosition.Y + player.Height < gamesizeY && !CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0]))
                     playerPosition.Y++;
-            Thread.Sleep(24);
+            Thread.Sleep(16);
         } 
         if ((CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y + 1 }, elements[0])
-            ||CollidesWith(new List<int> { elements[0].Pos.X, elements[0].Pos.Y - 1 }, elements[0])
             ||CollidesWith(new List<int> { elements[0].Pos.X + 1, elements[0].Pos.Y }, elements[0])
             ||CollidesWith(new List<int> { elements[0].Pos.X - 1, elements[0].Pos.Y }, elements[0]))
             || elements[0].Pos.Y + elements[0].Object.Height == gamesizeY
