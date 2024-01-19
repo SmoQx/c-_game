@@ -15,7 +15,7 @@ public class Game
         gamesizeY = height;
         elements = new List<Element>();
         map = new Map(gamesizeX, gamesizeY);
-        mapGenerator = new MapGenerator(elements);
+        mapGenerator = new MapGenerator(elements, gamesizeX, gamesizeY);
         player = new Player();
         playerPosition = new Position(width / 2, gamesizeY - player.Height);
         elements.Add(new Element(player, playerPosition));
