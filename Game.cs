@@ -50,11 +50,7 @@ public class Game
         elements.Add(new Element(new Obstacle(3, 2), new Position(9, gamesizeY - 8)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(12, gamesizeY - 3)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(15, 8)));
-        foreach (var item in mapGenerator.Generate(3))
-        {
-            Console.Write(item);
-            item.Render();
-        }
+        elements.AddRange(mapGenerator.Generate(5));
 
         gameState = GameState.MainMenu;
     }

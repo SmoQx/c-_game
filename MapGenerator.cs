@@ -16,9 +16,9 @@ public class MapGenerator {
 
         for (int i = 0; i < howMany; i++)
         {
-            x = x * i;
-            y = y * 2 * i;
-            Elements.Add(new Element(new Obstacle(width, height, gravity: gravity), new Position(x, y)));
+            int newx = i + x;
+            int newy = i^2 + i * y;
+            Elements.Add(new Element(new Obstacle(width, height, gravity: gravity), new Position(newx, newy)));
         }
         //foreach (var element in Elements)
         //{ 
@@ -27,5 +27,3 @@ public class MapGenerator {
         return Elements;
     }
 }
-
- 
