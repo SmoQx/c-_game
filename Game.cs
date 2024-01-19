@@ -7,6 +7,7 @@ public class Game
     private int gamesizeX;
     private int gamesizeY;
     private Map map;
+    private MapGenerator mapGenerator;
 
     public Game(int width, int height)
     {
@@ -14,6 +15,7 @@ public class Game
         gamesizeY = height;
         elements = new List<Element>();
         map = new Map(gamesizeX, gamesizeY);
+        mapGenerator = new MapGenerator(elements);
         player = new Player();
         playerPosition = new Position(width / 2, gamesizeY - player.Height);
         elements.Add(new Element(player, playerPosition));
@@ -48,6 +50,7 @@ public class Game
         elements.Add(new Element(new Obstacle(3, 2), new Position(9, gamesizeY - 8)));
         elements.Add(new Element(new Obstacle(2, 2), new Position(12, gamesizeY - 3)));
         elements.Add(new Element(new Obstacle(2, 2, gravity: true), new Position(15, 8)));
+        elements.AddRange(mapGenerator.Generate(5));
 
         gameState = GameState.MainMenu;
     }
